@@ -1,0 +1,17 @@
+primary_machine: app1
+database: external
+
+configure_private_vars:
+  ansible_ask_sudo_pass: false
+  ansible_ssh_user: '{{ ansible_user }}'
+  ansible_sudo: true
+  using_ssh_host_keys: true
+
+mongo: true
+mongo_database: ansible
+mongo_host: data1
+mongo_port: 27017
+
+pg_host: data1
+pg_port: 5432
+pg_subnet: 192.168.22.0/24

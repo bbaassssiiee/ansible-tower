@@ -1,0 +1,93 @@
+---
+- name: 'create ssh dir for root'
+  file: dest=/root/.ssh mode=0700 owner=root group=root state=directory
+  tags:
+    - sshkey
+
+- name: 'copy key'
+  copy: src=pki/vagrant.rsa
+        dest=/root/.ssh/id_rsa
+        mode=0600 owner=root
+  tags:
+    - sshkey
+
+- name: 'setup config for ssh'
+  copy: src=config dest=/root/.ssh/config owner=root group=root
+  tags:
+    - sshkey
+
+- name: 'generate known host record'
+  shell: ssh-keyscan -H {{ primary_machine }} >> /root/.ssh/known_hosts
+  tags:
+    - sshkey
+
+- name: 'download ansible tower installer'
+  get_url: url={{ tower_url }} dest=~ validate_certs=no
+  retries: 3
+  register: download
+  tags:
+    - tower
+
+- name: 'untar ansible tower installer'
+  #command: tar xfz {{ download.dest }} -C {{ temp_dir }}
+  unarchive: src={{ download.dest }} copy=no dest={{ temp_dir }}
+  register: untar
+  tags:
+    - tower
+
+- name: 'fix permissions'
+  file: dest={{ temp_dir }}/{{ tower_name }} recurse=yes owner={{ ansible_user }}
+
+
+#- name: 'set umask to 022'
+#  lineinfile: dest=/root/.bashrc line='umask 022' state=present
+#  tags:
+#    - umask
+
+- name: 'set umask to 022'
+  lineinfile: dest=/home/{{ ansible_user}}/.bashrc line='umask 022' state=present
+  tags:
+    - umask
+
+#- name: 'set umask to 022'
+#  command: sed -i 's/umask 077/umask 022/' /etc/profile
+#  tags:
+#    - umask
+
+- name: 'remove ansible tower tarball'
+  file: path={{ download.dest }} state=absent
+  tags:
+    - tower
+
+- name: 'install psycopg2'
+  yum: name={{ temp_dir }}/{{ tower_name }}/bundle/repos/pgdg94/{{ item }} state=installed
+  with_items: '{{ python_libs }}'
+
+- name: 'place inventory file'
+  template: src=inventory.j2 dest={{ temp_dir }}/{{ tower_name }}/inventory
+            owner=vagrant group=vagrant
+  tags:
+    - tower
+    - towerconfig
+
+- name: 'place configuration file'
+  template: src=tower_setup_conf.yml.j2 dest={{ temp_dir }}/{{ tower_name }}/tower_setup_conf.yml
+            owner=vagrant group=vagrant
+  tags:
+    - tower
+    - towerconfig
+
+- name: 'run setup'
+  become: yes
+  command: "{{ temp_dir }}/{{ tower_name }}/setup.sh"
+  tags:
+    - tower
+    - setup
+
+- name: 'test tower listening socket'
+  wait_for: host=localhost timeout=30
+  tags:
+    - tower
+    - test
+    - setup
+

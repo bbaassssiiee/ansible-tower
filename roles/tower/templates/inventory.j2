@@ -1,0 +1,6 @@
+[primary]
+{{ primary_machine }}
+
+[all:vars]
+ansible_ssh_user={{ ansible_user }}
+ansible_sudo={{ configure_private_vars.ansible_sudo }}

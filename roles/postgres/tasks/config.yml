@@ -1,0 +1,81 @@
+---
+
+- name: 'init postgresql database'
+  command: service postgresql-9.4 initdb creates=/var/lib/pgsql/9.3/data/postgresql.conf
+  become: yes
+  notify:
+    - restart postgresql-9.4
+  when: ansible_os_family == "RedHat"
+  tags:
+    - install
+
+- name: 'ensure postgresql is running automatically at boot'
+  service: name=postgresql-9.4 enabled=yes
+  become: yes
+  when: ansible_os_family == "RedHat"
+  tags:
+    - install
+
+- name: 'configure pg_hba.conf'
+  template: src=pg_hba.conf.j2 dest=/var/lib/pgsql/9.4/data/pg_hba.conf backup=no
+            owner=postgres
+  become: yes
+  notify:
+    - restart postgresql-9.4
+  when: ansible_os_family == "RedHat"
+  tags:
+    - config
+
+- name: 'unset ip to listen on to ipv4 localhost'
+  become: yes
+  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertbefore='^#listen_addresses'
+              line="listen_addresses = '127.0.0.1'" state=absent
+  tags:
+    - config
+
+- name: 'see if iptables file exists'
+  stat: path=/etc/sysconfig/iptables
+  register: iptables
+
+- name: 'fix "postgresql" in /etc/sysconfig/iptables file'
+  become: yes
+  lineinfile: dest=/etc/sysconfig/iptables
+              line='-A INPUT -p tcp -m tcp --dport 5432 -j ACCEPT'
+              state=present
+              insertbefore=^COMMIT
+  notify: restart iptables
+  when: iptables is defined and iptables.stat.exists
+  tags:
+    - config
+    - iptables
+
+- name: 'set listen on on ipv4 addresses'
+  become: yes
+  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertbefore='^#listen_addresses'
+              line="listen_addresses = '*'" state=present
+
+- name: 'startup postgres'
+  service: name=postgresql-9.4 state=started
+  tags:
+    - config
+    - pguser
+
+- name: 'initialize the postgresql user'
+  postgresql_user: name='{{pg_username}}'
+  become: yes
+  register: create_pg_user
+  tags:
+    - pguser
+
+- name: 'set the password for the postgres user'
+  postgresql_user: name='{{pg_username}}' password="{{pg_password}}"
+  become: yes
+  when: create_pg_user.changed
+  tags:
+    - pguser
+
+- name: 'create the postgresql database for tower'
+  postgresql_db: name={{pg_database}} owner={{pg_username}} state=present login_user=postgres
+  become: yes
+  tags:
+    - pguser

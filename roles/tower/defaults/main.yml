@@ -1,0 +1,10 @@
+tower_version: 2.4.4-1
+tower_name: ansible-tower-setup-bundle-{{ tower_version }}.el{{ ansible_distribution_major_version }}
+tower_url: https://releases.ansible.com/ansible-tower/setup-bundle/{{ tower_name }}.tar.gz
+temp_dir: /tmp
+ansible_primary_host: localhost
+
+python_libs:
+  - postgresql94-libs-9.4.6-1PGDG.rhel6.x86_64.rpm
+  - postgresql94-9.4.6-1PGDG.rhel6.x86_64.rpm
+  - python-psycopg2-2.6.1-1.rhel6.x86_64.rpm

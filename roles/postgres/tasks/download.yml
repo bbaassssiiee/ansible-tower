@@ -1,0 +1,18 @@
+- name: 'download ansible tower installer'
+  get_url: url={{ tower_url }} dest=~ validate_certs=no
+  retries: 3
+  register: download
+  tags:
+    - tower
+
+- name: 'untar ansible tower installer'
+  #command: tar xfz {{ download.dest }} -C {{ temp_dir }}
+  unarchive: src={{ download.dest }} copy=no dest={{ temp_dir }}
+  register: untar
+  tags:
+    - tower
+
+- name: 'remove ansible tower tarball'
+  file: path={{ download.dest }} state=absent
+  tags:
+    - tower

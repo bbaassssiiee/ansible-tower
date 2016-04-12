@@ -1,0 +1,48 @@
+---
+- name: Create the MongoDB repo file
+  copy: src=mongodb.repo dest=/etc/yum.repos.d/mongodb-org-3.0.repo
+
+- name: Install policycoreutils-python
+  yum: name=policycoreutils-python state=installed
+
+- name: Install pymongo
+  yum: name=python-pymongo state=installed
+
+- name: Install MongoDB
+  yum: "name={{ item }} state=present"
+  notify: restart mongod
+  with_items:
+    - "mongodb-org-{{ mongo_version }}"
+    - "mongodb-org-server-{{ mongo_version }}"
+    - "mongodb-org-shell-{{ mongo_version }}"
+    - "mongodb-org-mongos-{{ mongo_version }}"
+    - "mongodb-org-tools-{{ mongo_version }}"
+
+- name: Copy the configuration file
+  template: src=mongod.conf.j2 dest=/etc/mongod.conf
+  notify: restart mongod
+
+- name: Copy limits file
+  copy: src=mongo_limits.conf dest=/etc/security/limits.d/mongo_limits.conf
+        owner=root group=root
+
+#- name: Check if MongoDB port is already configured
+#  shell: semanage port -l | grep {{ mongo_net.port }}
+#  register: mongo_port
+#  changed_when: "'mongod_port_t' not in mongo_port.stdout or ' {{ mongo_net.port }},' not in mongo_port.stdout"
+
+#- name: Open port for MongoDB
+#  command: semanage port -a -t mongod_port_t -p tcp {{ mongo_net.port }}
+#  notify: restart mongod
+#  when: mongo_port.changed
+
+- name: Enable mongod service on startup
+  service: name=mongod enabled=yes
+
+- name: Start mongod
+  service: name=mongod state=started
+
+- name: Create Mongo user
+  mongodb_user: name={{ mongo_username }}
+                password={{ mongo_password }}
+                database={{ mongo_database }}
