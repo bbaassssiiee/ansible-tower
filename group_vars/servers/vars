@@ -10,7 +10,9 @@ configure_private_vars:
 mongo: true
 mongo_database: ansible
 mongo_host: data1
-mongo_port: 27017
+mongo_net:
+    ip: '{{ ansible_eth1["ipv4"]["address"] }}'
+    port: 27017
 
 pg_host: data1
 pg_port: 5432

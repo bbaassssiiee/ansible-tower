@@ -1,12 +1,18 @@
 ---
 - name: Create the MongoDB repo file
   copy: src=mongodb.repo dest=/etc/yum.repos.d/mongodb-org-3.0.repo
+  tags:
+    - mongodb
 
 - name: Install policycoreutils-python
   yum: name=policycoreutils-python state=installed
+  tags:
+    - mongodb
 
 - name: Install pymongo
   yum: name=python-pymongo state=installed
+  tags:
+    - mongodb
 
 - name: Install MongoDB
   yum: "name={{ item }} state=present"
@@ -17,14 +23,20 @@
     - "mongodb-org-shell-{{ mongo_version }}"
     - "mongodb-org-mongos-{{ mongo_version }}"
     - "mongodb-org-tools-{{ mongo_version }}"
+  tags:
+    - mongodb
 
 - name: Copy the configuration file
   template: src=mongod.conf.j2 dest=/etc/mongod.conf
   notify: restart mongod
+  tags:
+    - mongodb
 
 - name: Copy limits file
   copy: src=mongo_limits.conf dest=/etc/security/limits.d/mongo_limits.conf
         owner=root group=root
+  tags:
+    - mongodb
 
 #- name: Check if MongoDB port is already configured
 #  shell: semanage port -l | grep {{ mongo_net.port }}
@@ -38,11 +50,17 @@
 
 - name: Enable mongod service on startup
   service: name=mongod enabled=yes
+  tags:
+    - mongodb
 
 - name: Start mongod
   service: name=mongod state=started
+  tags:
+    - mongodb
 
 - name: Create Mongo user
   mongodb_user: name={{ mongo_username }}
                 password={{ mongo_password }}
                 database={{ mongo_database }}
+  tags:
+    - mongodb
