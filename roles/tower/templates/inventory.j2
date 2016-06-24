@@ -1,6 +1,11 @@
 [primary]
-{{ primary_machine }}
+{{ primary_machine }} ansible_ssh_user={{ install_user }} ansible_ssh_port={{ ssh_port }} {{ ansible_options }}
+
+{% if secondary_machine is defined %}
+[secondary]
+{{ secondary_machine }} ansible_ssh_user={{ install_user }} ansible_ssh_port={{ ssh_port }} {{ ansible_options }}
+{% endif %}
 
 [all:vars]
-ansible_ssh_user={{ ansible_user }}
-ansible_sudo={{ configure_private_vars.ansible_sudo }}
+ansible_ssh_user={{ install_user }} ansible_ssh_port={{ ssh_port }} {{ ansible_options }}
+[all:vars]

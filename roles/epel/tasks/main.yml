@@ -1,0 +1,6 @@
+---
+
+# EPEL Yum repository adds Extra Packages for Enterprise Linux
+- name: 'add EPEL yum repo'
+  yum: name=epel-release state=present
+  when: internet is defined

@@ -1,18 +1,33 @@
+---
 - name: 'download ansible tower installer'
+  become: no
   get_url: url={{ tower_url }} dest=~ validate_certs=no
   retries: 3
   register: download
   tags:
-    - tower
+    - postgres
+    - download
 
 - name: 'untar ansible tower installer'
+  become: no
   #command: tar xfz {{ download.dest }} -C {{ temp_dir }}
   unarchive: src={{ download.dest }} copy=no dest={{ temp_dir }}
   register: untar
   tags:
-    - tower
+    - postgres
+    - download
 
 - name: 'remove ansible tower tarball'
+  become: no
   file: path={{ download.dest }} state=absent
   tags:
-    - tower
+    - postgres
+    - download
+
+- name: 'patch playbooks to use become instead of sudo'
+  become: no
+  shell: "sed -i 's/sudo_user:/#become_user:/;s/sudo:/become:/;' {{ temp_dir }}/{{ tower_name }}/roles/*/tasks/main.yml;"
+  when: boks is defined
+  tags:
+    - patch
+    - download

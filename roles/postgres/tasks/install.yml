@@ -1,11 +1,11 @@
 ---
-
-- name: 'install the postgres yum repo'
-  become: yes
-  yum: name={{postgres_repo}} state=present
-  when: ansible_os_family == "RedHat"
-  tags:
-    - install
+#- name: 'install the postgres yum repo'
+#  become: yes
+#  yum: name={{postgres_repo}} state=present
+#  when: ansible_os_family == "RedHat"
+#  tags:
+#    - install
+#    - postgres
 
 - name: 'install postgres packages'
   become: yes
@@ -14,3 +14,14 @@
   when: ansible_os_family == "RedHat"
   tags:
     - install
+    - postgres
+
+- name: 'install required libraries'
+  become: yes
+  pip: name={{ item }} state=present
+  tags:
+    - install
+    - postgres
+    - startslave
+  with_items:
+    - pexpect

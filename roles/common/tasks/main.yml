@@ -1,0 +1,9 @@
+---
+
+- name: 'install packages for systems management'
+  yum: name={{ item }} state=present
+  with_items:
+   - libselinux-python
+   - libsemanage-python
+   - unzip
+

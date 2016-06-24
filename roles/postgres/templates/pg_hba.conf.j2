@@ -1,11 +1,16 @@
 # TYPE  DATABASE    USER        CIDR-ADDRESS          METHOD
 
 local   all         postgres                          trust
-
-local   all         dba                               md5
-
-host    all         all         127.0.0.1/32          md5
-
+local   all         root                              trust
+# "local" is for Unix domain socket connections only
+local   all         all                               trust
+# IPv4 local connections
+host    all         all         127.0.0.1/32          trust
+# IPv6 local connections:
+host    all         all         ::1/128               trust
+# The database slave needs access to the database
+host    replication all         {{ slave_ip }}/32     trust
+# The database needs access to the database slave
+host    replication all         {{ pg_ip }}/32        trust
+# The application needs access to the database
 host    all         all         {{ pg_subnet }}       password
-
-# host    all         all         0.0.0.0/0           md5

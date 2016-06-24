@@ -1,13 +1,49 @@
 ---
 
+- name: 'make sure .bashrc exists'
+  become: no
+  file: path=~/.bashrc state=touch
+  tags:
+    - postgres
+    - bash
+
+- name: 'amend path variable'
+  lineinfile: dest=~/.bashrc 
+              line='export PATH=$PATH:/usr/pgsql-9.4/bin' 
+              state=present
+  tags:
+    - postgres
+    - bash
+
+- name: 'amend path variable'
+  lineinfile: dest=/var/lib/pgsql/.bash_profile
+              line='export PATH=$PATH:/usr/pgsql-9.4/bin' 
+              state=present
+  tags:
+    - postgres
+    - bash
+
 - name: 'init postgresql database'
-  command: service postgresql-9.4 initdb creates=/var/lib/pgsql/9.3/data/postgresql.conf
+  command: service postgresql-9.4 initdb creates=/var/lib/pgsql/9.4/data/postgresql.conf
   become: yes
   notify:
     - restart postgresql-9.4
-  when: ansible_os_family == "RedHat"
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
   tags:
     - install
+    - init
+    - postgres
+
+- name: 'init postgresql database'
+  command: /usr/pgsql-9.4/bin/postgresql94-setup initdb creates=/var/lib/pgsql/9.4/data/postgresql.conf
+  become: yes
+  notify:
+    - restart postgresql-9.4
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+  tags:
+    - install
+    - init
+    - postgres
 
 - name: 'ensure postgresql is running automatically at boot'
   service: name=postgresql-9.4 enabled=yes
@@ -15,6 +51,7 @@
   when: ansible_os_family == "RedHat"
   tags:
     - install
+    - postgres
 
 - name: 'configure pg_hba.conf'
   template: src=pg_hba.conf.j2 dest=/var/lib/pgsql/9.4/data/pg_hba.conf backup=no
@@ -22,20 +59,36 @@
   become: yes
   notify:
     - restart postgresql-9.4
-  when: ansible_os_family == "RedHat"
   tags:
     - config
+    - postgres
+    - replica
+
+- name: 'copy start_pg_slave.sh'
+  template: src=start_pg_slave.sh.j2 dest=/usr/local/bin/start_pg_slave.sh backup=no
+            owner=root mode=0700
+  become: yes
+  when: role == "slave"
+  tags:
+    - config
+    - postgres
+    - replica
 
 - name: 'unset ip to listen on to ipv4 localhost'
   become: yes
-  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertbefore='^#listen_addresses'
-              line="listen_addresses = '127.0.0.1'" state=absent
+  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf 
+              insertbefore='^#listen_addresses'
+              line="listen_addresses = '127.0.0.1'" 
+              state=absent
   tags:
     - config
+    - postgres
 
 - name: 'see if iptables file exists'
   stat: path=/etc/sysconfig/iptables
   register: iptables
+  tags:
+    - postgres
 
 - name: 'fix "postgresql" in /etc/sysconfig/iptables file'
   become: yes
@@ -48,34 +101,124 @@
   tags:
     - config
     - iptables
+    - postgres
 
 - name: 'set listen on on ipv4 addresses'
   become: yes
   lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertbefore='^#listen_addresses'
               line="listen_addresses = '*'" state=present
+  tags:
+    - postgres
+
+- name: 'set replication setting: wal_level'
+  become: yes
+  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertafter='^listen_addresses'
+              line="wal_level = hot_standby" state=present
+  tags:
+    - postgres
+    - replica
+
+- name: 'set replication setting: max_wal_senders'
+  become: yes
+  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertafter='^#max_wal_senders'
+              line="max_wal_senders = 3" state=present
+  tags:
+    - postgres
+    - replica
+
+- name: 'set replication setting: checkpoint_segments'
+  become: yes
+  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertafter='^#checkpoint_segments'
+              line="checkpoint_segments = 8" state=present
+  tags:
+    - postgres
+    - replica
+
+- name: 'set replication setting: wal_keep_segments'
+  become: yes
+  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertafter='^#wal_keep_segments'
+              line="wal_keep_segments = 8" state=present
+  tags:
+    - postgres
+    - replica
+
+- name: 'set replication setting: hot_standby'
+  become: yes
+  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertafter='^wal_keep_segments'
+              line="hot_standby = on" state=present
+#  when: role == "slave"
+  tags:
+    - postgres
+    - replica
+
+- name: 'set replication setting: archive_mode'
+  become: yes
+  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertafter='^#archive_mode'
+              line="archive_mode = on" state=present
+#  when: role == "slave"
+  tags:
+    - postgres
+    - replica
+
+- name: 'set replication setting: archive_command'
+  become: yes
+  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertafter='^#archive_command'
+              line="archive_command = 'cd .'" state=present
+#  when: role == "slave"
+  tags:
+    - postgres
+    - replica
 
 - name: 'startup postgres'
   service: name=postgresql-9.4 state=started
+  when: role == "master"
   tags:
+    - postgres
     - config
     - pguser
 
 - name: 'initialize the postgresql user'
-  postgresql_user: name='{{pg_username}}'
+  postgresql_user: name='{{ pg_username }}' role_attr_flags='CREATEDB,CREATEROLE'
+  when: role == "master"
   become: yes
   register: create_pg_user
   tags:
+    - postgres
     - pguser
 
 - name: 'set the password for the postgres user'
-  postgresql_user: name='{{pg_username}}' password="{{pg_password}}"
+  postgresql_user: name='{{ pg_username }}' password="{{ pg_password }}"
   become: yes
-  when: create_pg_user.changed
+  when: role == "master"
   tags:
+    - postgres
     - pguser
 
+- name: 'initialize the replicator user'
+  postgresql_user: name='replicator' 
+                   role_attr_flags='REPLICATION' 
+                   password="{{ pg_password }}"
+  when: role == "master"
+  tags:
+    - postgres
+    - pguser
+    - replica
+  
+- name: 'start the slave with the script in /usr/local/bin'
+  expect: 
+    command: /usr/local/bin/start_pg_slave.sh
+    responses:
+      Password: "{{ pg_password }}"
+  when: role == "slave"
+  tags:
+    - postgres
+    - replica
+    - startslave
+
 - name: 'create the postgresql database for tower'
-  postgresql_db: name={{pg_database}} owner={{pg_username}} state=present login_user=postgres
+  postgresql_db: name={{ pg_database }} owner={{ pg_username }} state=present login_user=postgres
+  when: role == "master"
   become: yes
   tags:
+    - postgres
     - pguser

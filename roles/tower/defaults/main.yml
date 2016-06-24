@@ -4,6 +4,11 @@ tower_url: https://releases.ansible.com/ansible-tower/setup-bundle/{{ tower_name
 temp_dir: /tmp
 ansible_primary_host: localhost
 
+tower_ldap_url: "ldaps://ad.intra:3269"
+tower_ldap_tls: False
+tower_ldap_user_dn_template: "uid=%(user)s,OU=People,O=Ansible"
+tower_ldap_group_search_base: "OU=Group,OU=Organization,O=Ansible"
+
 python_libs:
   - postgresql94-libs-9.4.6-1PGDG.rhel6.x86_64.rpm
   - postgresql94-9.4.6-1PGDG.rhel6.x86_64.rpm

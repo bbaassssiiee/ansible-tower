@@ -1,8 +1,9 @@
 ---
-- name: Create the MongoDB repo file
-  copy: src=mongodb.repo dest=/etc/yum.repos.d/mongodb-org-3.0.repo
-  tags:
-    - mongodb
+#  We install pymongo from in-house epel repo, mongo from bundle
+#- name: Create the MongoDB repo file
+#  copy: src=mongodb.repo dest=/etc/yum.repos.d/mongodb-org-3.0.repo
+#  tags:
+#    - mongodb
 
 - name: Install policycoreutils-python
   yum: name=policycoreutils-python state=installed
@@ -10,19 +11,14 @@
     - mongodb
 
 - name: Install pymongo
-  yum: name=python-pymongo state=installed
+  yum: name=python-pymongo state=present
   tags:
     - mongodb
 
 - name: Install MongoDB
   yum: "name={{ item }} state=present"
   notify: restart mongod
-  with_items:
-    - "mongodb-org-{{ mongo_version }}"
-    - "mongodb-org-server-{{ mongo_version }}"
-    - "mongodb-org-shell-{{ mongo_version }}"
-    - "mongodb-org-mongos-{{ mongo_version }}"
-    - "mongodb-org-tools-{{ mongo_version }}"
+  with_items: '{{ mongo_rpms }}'
   tags:
     - mongodb
 
@@ -35,6 +31,7 @@
 - name: Copy limits file
   copy: src=mongo_limits.conf dest=/etc/security/limits.d/mongo_limits.conf
         owner=root group=root
+  notify: restart mongod
   tags:
     - mongodb
 
@@ -47,6 +44,15 @@
 #  command: semanage port -a -t mongod_port_t -p tcp {{ mongo_net.port }}
 #  notify: restart mongod
 #  when: mongo_port.changed
+
+- name: 'Install mongod start script'
+  copy: src=mongod.j2
+        dest=/etc/init.d/mongod
+        mode=0755
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
+  notify: restart mongod
+  tags:
+    - mongodb
 
 - name: Enable mongod service on startup
   service: name=mongod enabled=yes

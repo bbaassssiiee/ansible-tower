@@ -1,25 +1,12 @@
 ---
 
-- name: 'install packages for systems management'
-  yum: name={{ item }} state=present
-  with_items:
-   - libselinux-python
-   - libsemanage-python
-   - unzip
-  tags:
-    - hosts
-
-# EPEL Yum repository adds Extra Packages for Enterprise Linux
-- name: 'add EPEL yum repo'
-  yum: name=epel-release state=present
-
 - name: 'set hostname'
   hostname: name={{ inventory_hostname }}
   tags:
     - hosts
 
-# ONLY FOR VAGRANT
-- name: 'setup /etc/hosts'
-  template: src=hosts.j2 dest=/etc/hosts mode=0644 owner=root group=root
+- name: 'build hosts file'
+  template: src=hosts.j2 dest=/etc/hosts owner=root group=root mode=0644
   tags:
     - hosts
+

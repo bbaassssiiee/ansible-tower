@@ -1,10 +1,10 @@
 ---
 # Version to be installed, must be >= 2.6
-mongo_version: 3.0.1
+mongo_version: 3.2.3
 
 # Network
 mongo_net:
-    ip: 127.0.0.1
+    ip: 0.0.0.0
     port: 27017
 
 # Logs

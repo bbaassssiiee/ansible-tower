@@ -1,6 +1,6 @@
 admin_password: {{ admin_password }}
 configure_private_vars:
-  ansible_ask_sudo_pass: {{ configure_private_vars.ansible_sudo }}
+  ansible_ask_sudo_pass: {{ configure_private_vars.ansible_ask_sudo_pass }}
   ansible_ssh_user: {{ configure_private_vars.ansible_ssh_user }}
   ansible_sudo: {{ configure_private_vars.ansible_sudo }}
   using_ssh_host_keys: {{ configure_private_vars.using_ssh_host_keys }}
@@ -18,4 +18,6 @@ pg_password: {{ pg_password }}
 pg_port: {{ pg_port }}
 pg_username: {{ pg_username }}
 primary_machine: {{ primary_machine }}
+redis_host: localhost
+redis_port: 6379
 redis_password: {{ redis_password }}

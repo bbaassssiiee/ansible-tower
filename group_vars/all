@@ -1,11 +1,23 @@
 
-ansible_user: vagrant
-temp_dir: /home/{{ ansible_user }}
+ansible_user: ansible
+install_user: root
+ansible_options: ""
+ansible_ssh_key: id_rsa
+home_dir: "{{ lookup('env','HOME') }}"
+temp_dir: "{{ home_dir }}"
+enable_ldap: False
 
 # The directory prefix where the database files would be stored
 mongodb_datadir_prefix: /data/
-
-tower_version: 2.4.4-1
+# Network
+mongo_net:
+    ip: 0.0.0.0
+    port: 27017
+    
+tower_version: 2.4.5-1
 tower_name: ansible-tower-setup-bundle-{{ tower_version }}.el{{ ansible_distribution_major_version }}
 tower_url: https://releases.ansible.com/ansible-tower/setup-bundle/{{ tower_name }}.tar.gz
 
+# don't change these
+pg_username: awx
+pg_database: awx

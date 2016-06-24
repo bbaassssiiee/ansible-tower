@@ -1,0 +1,47 @@
+---
+- name: 'Install pip from default repo'
+  become: yes
+  shell: yum -y install {{ item }}
+  with_items:
+    - python-pip
+    - python-devel
+  tags:
+    - pypi
+
+- name: 'ensure some tools are present'
+  yum: name={{item}} state=present
+  with_items:
+    - libffi-devel
+    - gcc
+  tags:
+    - pypi
+    
+- name: 'install fixes for openssl'
+  pip: name={{item}} state=present
+  with_items:
+     - pyasn1
+  tags:
+    - pypi
+    
+- name: 'Make sure directory exists'
+  become: yes
+  file: dest=/root/.pip state=directory owner=root group=root
+  when: internet is not defined
+  tags:
+    - pypi
+
+- name: 'Deploy our own pip.conf config file'
+  become: yes
+  template: src=pip dest=/root/.pip/pip.conf
+  when: internet is not defined
+  tags:
+    - pypi
+
+- name: 'Upgrade pip from the pypi mirror'
+  become: yes
+  pip: name=pip extra_args='--upgrade'
+#  shell: pip install pip --upgrade
+  when: internet is not defined
+  tags:
+    - pypi
+    - test
