@@ -146,7 +146,6 @@
   become: yes
   lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertafter='^wal_keep_segments'
               line="hot_standby = on" state=present
-#  when: role == "slave"
   tags:
     - postgres
     - replica
@@ -155,7 +154,6 @@
   become: yes
   lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertafter='^#archive_mode'
               line="archive_mode = on" state=present
-#  when: role == "slave"
   tags:
     - postgres
     - replica
@@ -164,7 +162,6 @@
   become: yes
   lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf insertafter='^#archive_command'
               line="archive_command = 'cd .'" state=present
-#  when: role == "slave"
   tags:
     - postgres
     - replica
@@ -222,3 +219,4 @@
   tags:
     - postgres
     - pguser
+

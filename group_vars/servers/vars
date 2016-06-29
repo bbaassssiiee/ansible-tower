@@ -31,10 +31,10 @@ mongo_rpms:
   - "{{ mongo_rpm_dir }}/mongodb-org-tools-{{ mongo_version }}-1.el6.x86_64.rpm"
 
 pg_host: data1
-pg_ip: 192.168.20.10
-slave_ip: 192.168.20.11
+pg_ip: 192.168.22.10
+slave_ip: 192.168.22.11
 pg_port: 5432
-pg_subnet: 192.168.20.0/24
+pg_subnet: 192.168.22.0/24
 
 pg_rpm_dir: '{{ temp_dir }}/{{ tower_name }}/bundle/repos/pgdg94'
 postgres_packages:

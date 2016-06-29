@@ -13,7 +13,9 @@ mongodb_datadir_prefix: /data/
 mongo_net:
     ip: 0.0.0.0
     port: 27017
-    
+
+tower_host: tower
+repo_host: artifactory
 tower_version: 2.4.5-1
 tower_name: ansible-tower-setup-bundle-{{ tower_version }}.el{{ ansible_distribution_major_version }}
 tower_url: https://releases.ansible.com/ansible-tower/setup-bundle/{{ tower_name }}.tar.gz

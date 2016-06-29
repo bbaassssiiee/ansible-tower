@@ -37,29 +37,29 @@ Vagrant.configure("2") do |config|
     end
   end
 
-#  config.vm.define :data2, autostart: true do |data2_config|
-#    data2_config.vm.network "private_network", ip: "192.168.22.20", :netmask => "255.255.255.0",  auto_config: true
-#    data2_config.vm.network "forwarded_port", id: 'psql', guest: 5432, host: 25432, auto_correct: true
-#		data2_config.vm.network "forwarded_port", id: 'mongo', guest: 27020, host: 27020, auto_correct: true
-#    data2_config.vm.provider "virtualbox" do |vb|
-#      vb.customize ["modifyvm", :id, "--memory", "1024", "--natnet1", "172.16.1/24"]
-#      vb.gui = false
-#      vb.name = "data2"
-#    end
-#  end
-#
-#  config.vm.define :data3, autostart: true do |data3_config|
-#    data3_config.vm.network "private_network", ip: "192.168.22.30", :netmask => "255.255.255.0",  auto_config: true
-#		data3_config.vm.network "forwarded_port", id: 'mongo', guest: 27030, host: 27030, auto_correct: true
-#    data3_config.vm.provider "virtualbox" do |vb|
-#      vb.customize ["modifyvm", :id, "--memory", "1024", "--natnet1", "172.16.1/24"]
-#      vb.gui = false
-#      vb.name = "data3"
-#    end
-#  end
+  config.vm.define :data2, autostart: true do |data2_config|
+    data2_config.vm.network "private_network", ip: "192.168.22.11", :netmask => "255.255.255.0",  auto_config: true
+    data2_config.vm.network "forwarded_port", id: 'psql', guest: 5432, host: 25432, auto_correct: true
+		data2_config.vm.network "forwarded_port", id: 'mongo', guest: 27020, host: 27020, auto_correct: true
+    data2_config.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "1024", "--natnet1", "172.16.1/24"]
+      vb.gui = false
+      vb.name = "data2"
+    end
+  end
+
+  config.vm.define :data3, autostart: true do |data3_config|
+    data3_config.vm.network "private_network", ip: "192.168.22.12", :netmask => "255.255.255.0",  auto_config: true
+		data3_config.vm.network "forwarded_port", id: 'mongo', guest: 27030, host: 27030, auto_correct: true
+    data3_config.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "1024", "--natnet1", "172.16.1/24"]
+      vb.gui = false
+      vb.name = "data3"
+    end
+  end
 
   config.vm.define :app1,  primary: true do |app1_config|
-    app1_config.vm.network "private_network", ip: "192.168.22.40", :netmask => "255.255.255.0",  auto_config: true
+    app1_config.vm.network "private_network", ip: "192.168.22.13", :netmask => "255.255.255.0",  auto_config: true
     app1_config.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--memory", "4096", "--natnet1", "172.16.1/24"]
       vb.customize ["modifyvm", :id, "--ioapic", "on"  ]
@@ -67,16 +67,16 @@ Vagrant.configure("2") do |config|
       vb.gui = false
     end
   end
-#
-#    config.vm.define :app2,  primary: true do |app2_config|
-#    app2_config.vm.network "private_network", ip: "192.168.22.50", :netmask => "255.255.255.0",  auto_config: true
-#    app2_config.vm.provider "virtualbox" do |vb|
-#      vb.customize ["modifyvm", :id, "--memory", "1024", "--natnet1", "172.16.1/24"]
-#      vb.customize ["modifyvm", :id, "--ioapic", "on"  ]
-#      vb.name = "app2"
-#      vb.gui = false
-#    end
-#  end
+
+  config.vm.define :app2,  primary: true do |app2_config|
+    app2_config.vm.network "private_network", ip: "192.168.22.14", :netmask => "255.255.255.0",  auto_config: true
+    app2_config.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "1024", "--natnet1", "172.16.1/24"]
+      vb.customize ["modifyvm", :id, "--ioapic", "on"  ]
+      vb.name = "app2"
+      vb.gui = false
+    end
+  end
 
 end
 

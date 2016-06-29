@@ -4,3 +4,4 @@
 - name: 'add EPEL yum repo'
   yum: name=epel-release state=present
   when: internet is defined
+  tags: epel

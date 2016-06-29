@@ -156,6 +156,23 @@
     - setup
     - proot
 
+- name: 'disable Pendo tracking'
+  lineinfile: dest=/etc/tower/settings.py
+              regexp="^PENDO_TRACKING_STATE"
+              line="PENDO_TRACKING_STATE = 'off'"
+              state=present
+  tags:
+    - tower
+    - towerconfig
+    - setup
+
+- name: 'restart tower for new settings'
+  command: ansible-tower-service restart
+  tags:
+    - tower
+    - towerconfig
+    - setup
+
 - name: 'test tower listening socket'
   wait_for: host=localhost timeout=30
   tags:

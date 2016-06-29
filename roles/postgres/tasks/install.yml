@@ -15,6 +15,7 @@
   tags:
     - install
     - postgres
+    - python-pi
 
 - name: 'install required libraries'
   become: yes

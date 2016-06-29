@@ -1,0 +1,77 @@
+---
+
+- name: 'Install Python rpm dependencies'
+  command: yum -y install {{item}}
+  with_items:
+    - python-pyasn1
+    - python-requests
+    - python-click
+  tags:
+    - towercli
+
+- name: 'copy requirements.txt'
+  copy: src=requirements.txt dest=/tmp/requirements.txt
+  when: internet is defined
+  tags:
+    - towercli
+    
+- name: 'pip install dependencies'
+  pip: requirements=/tmp/requirements.txt state=latest
+  when: internet is defined
+  tags:
+    - towercli
+    
+- name: 'Download Python libraries'
+  get_url: validate_certs=no url={{item.url}} dest=/tmp/{{item.base}}.tar.gz
+  when: internet is not defined
+  with_items: '{{ python_libraries }}'
+  tags:
+    - towercli
+
+- name: 'Unpack Python libraries'
+  command: tar xfz /tmp/{{item.base}}.tar.gz -C /tmp
+  when: internet is not defined
+  with_items: '{{ python_libraries }}'
+  tags:
+    - towercli
+
+- name: 'Install Python libraries'
+  shell: (cd /tmp/{{item.base}};python setup.py install)
+  when: internet is not defined
+  with_items: '{{ python_libraries }}'
+  tags:
+    - towercli
+
+- name: 'Cleanup'
+  shell: rm -rf /tmp/{{item.base}} /tmp/{{item.base}}.tar.gz
+  when: internet is not defined
+  with_items: '{{ python_libraries }}'
+  tags:
+    - towercli
+
+- name: 'Configure tower host'
+  command: tower-cli --help
+  tags:
+    - towercli
+    - test
+
+- name: 'Configure tower host'
+  command: tower-cli config host {{tower_host}}
+  tags:
+    - towercli
+
+- name: 'Configure tower username'
+  command: tower-cli config username {{tower_user}}
+  tags:
+    - towercli
+
+- name: 'Configure tower password'
+  command: tower-cli config password {{tower_password}}
+  tags:
+    - towercli
+
+- name: 'Configure Tower for imperfect SSL certificates'
+  command: tower-cli config verify_ssl false
+  tags:
+    - towercli
+

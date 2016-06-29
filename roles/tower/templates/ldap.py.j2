@@ -41,7 +41,7 @@ AUTH_LDAP_BIND_PASSWORD = ''
 
 # Whether to enable TLS when the LDAP connection is not using SSL.
 
-AUTH_LDAP_START_TLS = False
+AUTH_LDAP_START_TLS = {{ tower_ldap_tls }}
 
 # Additional options to set for the LDAP connection.  LDAP referrals are
 # disabled by default (to prevent certain LDAP queries from hanging with AD).

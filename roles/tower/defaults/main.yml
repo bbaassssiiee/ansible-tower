@@ -8,6 +8,8 @@ tower_ldap_url: "ldaps://ad.intra:3269"
 tower_ldap_tls: False
 tower_ldap_user_dn_template: "uid=%(user)s,OU=People,O=Ansible"
 tower_ldap_group_search_base: "OU=Group,OU=Organization,O=Ansible"
+tower_ldap_base_dn: "O=Ansible"
+tower_ldap_user_base: "OU=Group,OU=Organization,O=Ansible"
 
 python_libs:
   - postgresql94-libs-9.4.6-1PGDG.rhel6.x86_64.rpm
