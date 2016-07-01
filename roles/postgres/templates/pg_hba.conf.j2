@@ -8,9 +8,13 @@ local   all         all                               trust
 host    all         all         127.0.0.1/32          trust
 # IPv6 local connections:
 host    all         all         ::1/128               trust
-# The database slave needs access to the database
+
+{% if slave_ip is defined %}
+    # The database slave needs access to the database
 host    replication all         {{ slave_ip }}/32     trust
-# The database needs access to the database slave
 host    replication all         {{ pg_ip }}/32        trust
+   # The database needs access to the database slave
+{% endif %}
+
 # The application needs access to the database
 host    all         all         {{ pg_subnet }}       password

@@ -70,7 +70,7 @@
             backup=no
             owner=root mode=0700
   become: yes
-  when: role == "slave"
+  when: role is defined and role == "slave"
   tags:
     - config
     - postgres
@@ -170,7 +170,7 @@
 
 - name: 'startup postgres'
   service: name=postgresql-9.4 state=started
-  when: role == "master"
+  when: role is defined and role == "master"
   tags:
     - postgres
     - config
@@ -178,7 +178,7 @@
 
 - name: 'initialize the postgresql user'
   postgresql_user: name='{{ pg_username }}' role_attr_flags='CREATEDB,CREATEROLE'
-  when: role == "master"
+  when: role is defined and role == "master"
   become: yes
   register: create_pg_user
   tags:
@@ -188,7 +188,7 @@
 - name: 'set the password for the postgres user'
   postgresql_user: name='{{ pg_username }}' password="{{ pg_password }}"
   become: yes
-  when: role == "master"
+  when: role is defined and role == "master"
   tags:
     - postgres
     - pguser
@@ -197,7 +197,7 @@
   postgresql_user: name='replicator' 
                    role_attr_flags='REPLICATION' 
                    password="{{ pg_password }}"
-  when: role == "master"
+  when: role is defined and role == "master"
   tags:
     - postgres
     - pguser
@@ -208,7 +208,7 @@
     command: /usr/local/bin/start_pg_slave.sh
     responses:
       Password: "{{ pg_password }}"
-  when: role == "slave"
+  when: role is defined and role == "slave"
   tags:
     - postgres
     - replica
@@ -216,7 +216,7 @@
 
 - name: 'create the postgresql database for tower'
   postgresql_db: name={{ pg_database }} owner={{ pg_username }} state=present login_user=postgres
-  when: role == "master"
+  when: role is defined and role == "master"
   become: yes
   tags:
     - postgres

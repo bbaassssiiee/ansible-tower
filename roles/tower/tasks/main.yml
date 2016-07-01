@@ -47,17 +47,18 @@
   
 - name: 'place ssh key'
   copy: src=/tmp/{{ primary_machine }}.pub dest=/root/.ssh/authorized_keys mode=0600
-  when: inventory_hostname == secondary_machine
+  when: secondary_machine is defined and inventory_hostname == secondary_machine
   tags:
     - sshkey
     - keycopy
 
 - name: 'place ssh key'
   copy: src=/tmp/{{primary_machine}}.pub dest={{ home_dir }}/.ssh/authorized_keys mode=0600
-  when: inventory_hostname == secondary_machine
+  when: secondary_machine is defined and inventory_hostname == secondary_machine
   tags:
     - sshkey
     - keycopy
+    - tower
 
 - name: 'setup config for ssh'
   copy: src=config dest=/root/.ssh/config owner=root group=root
@@ -73,6 +74,7 @@
 
 - name: 'generate known host record secondary_machine'
   shell: ssh-keyscan -H {{ secondary_machine }} >> /root/.ssh/known_hosts
+  when: secondary_machine is defined
   tags:
     - sshkey
     - tower
@@ -86,6 +88,8 @@
 
 - name: 'fix permissions'
   file: dest={{ temp_dir }}/{{ tower_name }} recurse=yes owner={{ ansible_user }}
+  tags:
+    - tower
 
 
 #- name: 'set umask to 022'
@@ -106,6 +110,7 @@
   register: present_version_ok
   tags:
     - rpm
+    - tower
 
 - name: 'install bundled rpm for ansible core'
   yum: name='{{ ansible_rpm }}' state=present
