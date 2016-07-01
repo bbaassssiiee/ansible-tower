@@ -71,7 +71,7 @@ Vagrant.configure("2") do |config|
   config.vm.define :app2,  primary: true do |app2_config|
     app2_config.vm.network "private_network", ip: "192.168.22.14", :netmask => "255.255.255.0",  auto_config: true
     app2_config.vm.provider "virtualbox" do |vb|
-      vb.customize ["modifyvm", :id, "--memory", "1024", "--natnet1", "172.16.1/24"]
+      vb.customize ["modifyvm", :id, "--memory", "4096", "--natnet1", "172.16.1/24"]
       vb.customize ["modifyvm", :id, "--ioapic", "on"  ]
       vb.name = "app2"
       vb.gui = false
