@@ -8,6 +8,7 @@
     - hosts
     - download
     - epel
+    - pypi
     - mongodb
     - postgres
 
@@ -19,6 +20,7 @@
     - hosts
     - download
     - epel
+    - pypi
     - git
     - pypi
     - tower

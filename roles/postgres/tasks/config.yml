@@ -65,7 +65,9 @@
     - replica
 
 - name: 'copy start_pg_slave.sh'
-  template: src=start_pg_slave.sh.j2 dest=/usr/local/bin/start_pg_slave.sh backup=no
+  template: src=start_pg_slave.sh.j2
+            dest=/usr/local/bin/start_pg_slave.sh
+            backup=no
             owner=root mode=0700
   become: yes
   when: role == "slave"
