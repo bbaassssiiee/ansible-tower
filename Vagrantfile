@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define :data2, autostart: true do |data2_config|
+  config.vm.define :data2, autostart: false do |data2_config|
     data2_config.vm.network "private_network", ip: "192.168.22.11", :netmask => "255.255.255.0",  auto_config: true
     data2_config.vm.network "forwarded_port", id: 'psql', guest: 5432, host: 25432, auto_correct: true
 		data2_config.vm.network "forwarded_port", id: 'mongo', guest: 27020, host: 27020, auto_correct: true
@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define :app2,  primary: true do |app2_config|
+  config.vm.define :app2,  autostart: false do |app2_config|
     app2_config.vm.network "private_network", ip: "192.168.22.14", :netmask => "255.255.255.0",  auto_config: true
     app2_config.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--memory", "4096", "--natnet1", "172.16.1/24"]

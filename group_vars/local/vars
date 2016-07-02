@@ -1,0 +1,51 @@
+ansible_user: "{{ lookup('env','USER') }}"
+temp_dir: "{{ lookup('env','HOME') }}"
+
+
+primary_machine: localhost
+ssh_port: 22
+ansible_options: ansible_sudo={{ configure_private_vars.ansible_sudo }}
+tower_host: localhost
+database: internal
+enable_ldap: False
+
+# only define this when internet is available
+internet: true
+
+configure_private_vars:
+  ansible_ask_sudo_pass: false
+  ansible_ssh_user: '{{ ansible_user }}'
+  ansible_sudo: true
+  using_ssh_host_keys: true
+
+ansible_rpm: "{{ temp_dir }}/{{ tower_name }}/bundle/repos/epel/ansible-2.0.2.0-1.el6.noarch.rpm"
+
+mongo: true
+mongo_version: 3.2.6
+mongo_database: ansible
+mongo_host: data1
+mongo_rpm_dir: '{{ temp_dir }}/{{ tower_name }}/bundle/repos/mongodb-org'
+mongo_rpms:
+  - "{{ mongo_rpm_dir }}/mongodb-org-{{ mongo_version }}-1.el6.x86_64.rpm"
+  - "{{ mongo_rpm_dir }}/mongodb-org-server-{{ mongo_version }}-1.el6.x86_64.rpm"
+  - "{{ mongo_rpm_dir }}/mongodb-org-shell-{{ mongo_version }}-1.el6.x86_64.rpm"
+  - "{{ mongo_rpm_dir }}/mongodb-org-mongos-{{ mongo_version }}-1.el6.x86_64.rpm"
+  - "{{ mongo_rpm_dir }}/mongodb-org-tools-{{ mongo_version }}-1.el6.x86_64.rpm"
+  
+pg_host: localhost
+pg_ip: 127.0.0.1
+pg_port: 5432
+pg_subnet:  '{{ ansible_default_ipv4["address"] }}/32'
+
+pg_rpm_dir: '{{ temp_dir }}/{{ tower_name }}/bundle/repos/pgdg94'
+postgres_packages:
+  - "{{pg_rpm_dir}}/postgresql94-libs-9.4.8-1PGDG.rhel6.x86_64.rpm"
+  - "{{pg_rpm_dir}}/postgresql94-9.4.8-1PGDG.rhel6.x86_64.rpm"
+  - "{{pg_rpm_dir}}/postgresql94-server-9.4.8-1PGDG.rhel6.x86_64.rpm"
+  - "{{pg_rpm_dir}}/python-psycopg2-2.6.1-1.rhel6.x86_64.rpm"
+
+
+python_libs:
+  - "{{pg_rpm_dir}}/postgresql94-libs-9.4.8-1PGDG.rhel6.x86_64.rpm"
+  - "{{pg_rpm_dir}}/python-psycopg2-2.6.1-1.rhel6.x86_64.rpm"
+  - "{{pg_rpm_dir}}/postgresql94-9.4.8-1PGDG.rhel6.x86_64.rpm"

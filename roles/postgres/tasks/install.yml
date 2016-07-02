@@ -1,11 +1,21 @@
 ---
-#- name: 'install the postgres yum repo'
-#  become: yes
-#  yum: name={{postgres_repo}} state=present
-#  when: ansible_os_family == "RedHat"
-#  tags:
-#    - install
-#    - postgres
+- name: 'verify the version of your OS.'
+  fail: msg='enterprise undefined'
+  when: ansible_os_family != "RedHat"
+
+- name: 'make sure pg_username and pg_password are defined.'
+  fail: msg='variables undefined'
+  when:
+    - pg_username is undefined
+    - pg_password is undefined
+
+- name: 'install the postgres yum repo'
+  become: yes
+  yum: name={{postgres_repo}} state=present
+  when: ansible_os_family == "RedHat"
+  tags:
+    - install
+    - postgres
 
 - name: 'install postgres packages'
   become: yes
@@ -15,7 +25,7 @@
   tags:
     - install
     - postgres
-    - python-pi
+    - python-pip
 
 - name: 'install required libraries'
   become: yes
