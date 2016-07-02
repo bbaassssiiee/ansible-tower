@@ -39,9 +39,7 @@
 
 - name: 'Upgrade pip from the pypi mirror'
   become: yes
-  pip: name=pip extra_args='--upgrade'
-#  shell: pip install pip --upgrade
-  when: internet is not defined
+  shell: pip install pip --upgrade
   tags:
     - pypi
     - test

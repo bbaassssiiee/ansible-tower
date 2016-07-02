@@ -15,3 +15,24 @@ python_libs:
   - postgresql94-libs-9.4.6-1PGDG.rhel6.x86_64.rpm
   - postgresql94-9.4.6-1PGDG.rhel6.x86_64.rpm
   - python-psycopg2-2.6.1-1.rhel6.x86_64.rpm
+
+python_pips:
+  - apache-libcloud
+  - azure
+  - boto
+  - ConfigParser
+  - cs
+  - django
+  - docker-py
+  - dopy
+  - linode-python
+  - netaddr
+  - pysphere
+  - python-keystoneclient
+  - python-novaclient
+  - python-quantumclient
+  - PyYAML
+  - pretty
+  - pyrax
+  - shade
+  - wsgiref

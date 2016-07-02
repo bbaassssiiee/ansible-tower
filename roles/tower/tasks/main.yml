@@ -119,13 +119,19 @@
     - tower 
     - rpm
 
-- name: 'install psycopg2'
-  #yum: name={{ temp_dir }}/{{ tower_name }}/bundle/repos/pgdg94/{{ item }} state=installed
+- name: 'install python library rpms'
   yum: name={{ item }} state=installed
   with_items: '{{ python_libs }}'
   tags:
     - tower
     - rpm
+
+- name: 'pip install more Ansible Core 1.9 dependencies'
+  pip: name={{ item }} state=present
+  with_items: '{{ python_pips }}'
+  tags:
+    - tower
+    - python_pips
 
 - name: 'place inventory file'
   template: src=inventory.j2 dest={{ temp_dir }}/{{ tower_name }}/inventory
