@@ -27,6 +27,7 @@ python_pips:
   - dopy
   - linode-python
   - netaddr
+  - netconify
   - pysphere
   - python-keystoneclient
   - python-novaclient

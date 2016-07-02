@@ -1,12 +1,14 @@
 ansible_user: vagrant
 home_dir: /home/vagrant
 temp_dir: /home/vagrant
+
 primary_machine: app1
-secondary_machine: app2
 ssh_port: 22
 ansible_options: ansible_sudo={{ configure_private_vars.ansible_sudo }}
-
+tower_host: app1
 database: external
+enable_ldap: False
+
 # only define this when internet is available
 internet: true
 
@@ -29,12 +31,11 @@ mongo_rpms:
   - "{{ mongo_rpm_dir }}/mongodb-org-shell-{{ mongo_version }}-1.el6.x86_64.rpm"
   - "{{ mongo_rpm_dir }}/mongodb-org-mongos-{{ mongo_version }}-1.el6.x86_64.rpm"
   - "{{ mongo_rpm_dir }}/mongodb-org-tools-{{ mongo_version }}-1.el6.x86_64.rpm"
-
-pg_host: data1
-pg_ip: 192.168.22.10
-slave_ip: 192.168.22.11
+  
+pg_host: localhost
+pg_ip: 127.0.0.1
 pg_port: 5432
-pg_subnet: 192.168.22.0/24
+pg_subnet:  '127.0.0.1/32'
 
 pg_rpm_dir: '{{ temp_dir }}/{{ tower_name }}/bundle/repos/pgdg94'
 postgres_packages:
