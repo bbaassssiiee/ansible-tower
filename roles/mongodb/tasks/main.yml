@@ -5,6 +5,10 @@
 #  tags:
 #    - mongodb
 
+- name: 'make sure mongo_rpm_dir is defined.'
+  fail: msg='variable mongo_rpm_dir is undefined'
+  when: mongo_rpm_dir is undefined
+
 - name: Install policycoreutils-python
   yum: name=policycoreutils-python state=installed
   tags:

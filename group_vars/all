@@ -16,11 +16,17 @@ mongo_net:
 
 tower_host: tower
 repo_host: artifactory
+
+# For determining RPM filenames for PostgreSQL, MongoDB and Tower
+rh: el{{ ansible_distribution_major_version }}
+rel: rhel{{ ansible_distribution_major_version }}
+
 tower_version: 2.4.5-1
-tower_name: ansible-tower-setup-bundle-{{ tower_version }}.el{{ ansible_distribution_major_version }}
+tower_name: ansible-tower-setup-bundle-{{ tower_version }}.{{ rh }}
 tower_url: https://releases.ansible.com/ansible-tower/setup-bundle/{{ tower_name }}.tar.gz
-
-
+ansible_rpm: "{{ temp_dir }}/{{ tower_name }}/bundle/repos/epel/ansible-2.0.2.0-1.{{ rh }}.noarch.rpm"
+mongo_rpm_dir: '{{ temp_dir }}/{{ tower_name }}/bundle/repos/mongodb-org'
+pg_rpm_dir: '{{ temp_dir }}/{{ tower_name }}/bundle/repos/pgdg94'
 
 # don't change these
 pg_username: awx

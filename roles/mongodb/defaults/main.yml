@@ -1,6 +1,15 @@
 ---
 # Version to be installed, must be >= 2.6
-mongo_version: 3.2.3
+mongo_version: 3.2.6
+
+rh: el{{ ansible_distribution_major_version }}
+
+mongo_rpms:
+  - "{{ mongo_rpm_dir }}/mongodb-org-{{ mongo_version }}-1.{{rh}}.x86_64.rpm"
+  - "{{ mongo_rpm_dir }}/mongodb-org-server-{{ mongo_version }}-1.{{rh}}.x86_64.rpm"
+  - "{{ mongo_rpm_dir }}/mongodb-org-shell-{{ mongo_version }}-1.{{rh}}.x86_64.rpm"
+  - "{{ mongo_rpm_dir }}/mongodb-org-mongos-{{ mongo_version }}-1.{{rh}}.x86_64.rpm"
+  - "{{ mongo_rpm_dir }}/mongodb-org-tools-{{ mongo_version }}-1.{{rh}}.x86_64.rpm"
 
 # Network
 mongo_net:
@@ -15,3 +24,4 @@ mongo_logs:
 # Database
 mongo_db:
     path: /var/lib/mongo
+

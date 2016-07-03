@@ -12,9 +12,9 @@ tower_ldap_base_dn: "O=Ansible"
 tower_ldap_user_base: "OU=Group,OU=Organization,O=Ansible"
 
 python_libs:
-  - postgresql94-libs-9.4.6-1PGDG.rhel6.x86_64.rpm
-  - postgresql94-9.4.6-1PGDG.rhel6.x86_64.rpm
-  - python-psycopg2-2.6.1-1.rhel6.x86_64.rpm
+  - "{{pg_rpm_dir}}/postgresql94-libs-9.4.8-1PGDG.rhel6.x86_64.rpm"
+  - "{{pg_rpm_dir}}/python-psycopg2-2.6.1-1.rhel6.x86_64.rpm"
+  - "{{pg_rpm_dir}}/postgresql94-9.4.8-1PGDG.rhel6.x86_64.rpm"
 
 python_pips:
   - apache-libcloud
@@ -31,7 +31,6 @@ python_pips:
   - python-keystoneclient
   - python-novaclient
   - python-quantumclient
-  - PyYAML
   - pretty
   - pyrax
   - shade

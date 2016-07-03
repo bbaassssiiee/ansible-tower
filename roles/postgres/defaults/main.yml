@@ -3,9 +3,9 @@
 postgres_repo: "http://yum.postgresql.org/9.4/redhat/rhel-6-x86_64/pgdg-redhat94-9.4-1.noarch.rpm"
 
 postgres_packages:
-  - postgresql94-server
-  - postgresql94-contrib
-  - perl-DBD-Pg
-  - python-psycopg2
+  - "{{pg_rpm_dir}}/postgresql94-libs-9.4.8-1PGDG.rhel6.x86_64.rpm"
+  - "{{pg_rpm_dir}}/postgresql94-9.4.8-1PGDG.rhel6.x86_64.rpm"
+  - "{{pg_rpm_dir}}/postgresql94-server-9.4.8-1PGDG.rhel6.x86_64.rpm"
+  - "{{pg_rpm_dir}}/python-psycopg2-2.6.1-1.rhel6.x86_64.rpm"
 
 postgres_jdbc_url: "https://jdbc.postgresql.org/download/postgresql-9.4-1201.jdbc41.jar"

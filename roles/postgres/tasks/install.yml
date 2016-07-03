@@ -3,6 +3,10 @@
   fail: msg='enterprise undefined'
   when: ansible_os_family != "RedHat"
 
+- name: 'make sure pg_rpm_dir is defined.'
+  fail: msg='variable pg_rpm_dir is undefined'
+  when: pg_rpm_dir is undefined
+    
 - name: 'make sure pg_username and pg_password are defined.'
   fail: msg='variables undefined'
   when:
