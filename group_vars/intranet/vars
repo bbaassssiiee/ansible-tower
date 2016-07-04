@@ -1,0 +1,39 @@
+ansible_user: ansible
+home_dir: /home/ansible
+temp_dir: "{{ home_dir }}"
+primary_machine: tower1.intra
+secondary_machine: tower2.intra
+ssh_port: 22
+ansible_options: ansible_sudo={{ configure_private_vars.ansible_sudo }}
+tower_host: "{{ primary_machine }}"
+database: external
+enable_ldap: True
+
+configure_private_vars:
+  ansible_ask_sudo_pass: false
+  ansible_ssh_user: '{{ ansible_user }}'
+  ansible_sudo: true
+  using_ssh_host_keys: true
+
+mongo: true
+mongo_database: ansible
+mongo_host: mongo.intra
+
+pg_host: sql.intra
+pg_ip: 10.1.1.100
+pg_port: 5432
+pg_subnet: 10.1.1.0/24
+slave_ip: 10.1.1.200
+
+#tower_url: https://releases.ansible.com/ansible-tower/setup-bundle/{{ tower_name }}.tar.gz
+tower_url: https://artifactory.intra/artifactory/vendors/tarballs/{{ tower_name }}.tar.gz
+
+tower_ldap_url: "ldaps://ad.intra:636"
+tower_ldap_tls: False
+tower_ldap_user_dn_template: "uid=%(user)s,OU=People,O=Ansible"
+tower_ldap_group_search_base: "OU=Group,OU=Organization,O=ansible"
+
+artifactory_hostname: artifactory.intra
+artifactory_port: 443
+artifactory_repo_path: 'artifactory/api/pypi/pypi_python_org/simple/'
+artifactory_certificate_path: '/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem'
