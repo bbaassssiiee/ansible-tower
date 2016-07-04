@@ -67,13 +67,14 @@
     - tower
 
 - name: 'generate known host record primary_machine'
-  shell: ssh-keyscan -H {{ primary_machine }} >> /root/.ssh/known_hosts
+  shell: ssh-keyscan -H {{ hostvars[primary_machine][ 'ansible_eth0' ]['ipv4']['address'] }} >> /root/.ssh/known_hosts
   tags:
     - sshkey
     - tower
 
 - name: 'generate known host record secondary_machine'
-  shell: ssh-keyscan -H {{ secondary_machine }} >> /root/.ssh/known_hosts
+  shell: ssh-keyscan -H {{ hostvars[secondary_machine][ 'ansible_eth0' ]['ipv4']['address'] }} >> /root/.ssh/known_hosts
+  #shell: ssh-keyscan -H {{ secondary_machine }} >> /root/.ssh/known_hosts
   when: secondary_machine is defined
   tags:
     - sshkey
@@ -119,19 +120,19 @@
     - tower 
     - rpm
 
-- name: 'install python library rpms'
-  yum: name={{ item }} state=installed
-  with_items: '{{ python_libs }}'
-  tags:
-    - tower
-    - rpm
-
-- name: 'pip install more Ansible Core 1.9 dependencies'
-  pip: name={{ item }} state=present
-  with_items: '{{ python_pips }}'
-  tags:
-    - tower
-    - python_pips
+#- name: 'install python library rpms'
+#  yum: name={{ item }} state=installed
+#  with_items: '{{ python_libs }}'
+#  tags:
+#    - tower
+#    - rpm
+#
+#- name: 'pip install more Ansible Core 1.9 dependencies'
+#  pip: name={{ item }} state=present
+#  with_items: '{{ python_pips }}'
+#  tags:
+#    - tower
+#    - python_pips
 
 - name: 'place inventory file'
   template: src=inventory.j2 dest={{ temp_dir }}/{{ tower_name }}/inventory
