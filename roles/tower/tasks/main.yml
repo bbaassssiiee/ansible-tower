@@ -93,10 +93,10 @@
     - tower
 
 
-#- name: 'set umask to 022'
-#  lineinfile: dest=/root/.bashrc line='umask 022' state=present
-#  tags:
-#    - umask
+- name: 'set umask to 022'
+  lineinfile: dest=/root/.bashrc line='umask 022' state=present
+  tags:
+    - umask
 
 - name: 'set umask to 022'
   become: no

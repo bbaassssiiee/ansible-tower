@@ -2,11 +2,13 @@
 
 - name: 'set hostname'
   hostname: name={{ inventory_hostname }}
+  when: internet is defined
   tags:
     - hosts
 
 - name: 'build hosts file'
   template: src=hosts.j2 dest=/etc/hosts owner=root group=root mode=0644
+  when: internet is defined
   tags:
     - hosts
 
