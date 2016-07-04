@@ -17,9 +17,9 @@ configure_private_vars:
 
 mongo: true
 mongo_database: ansible
-mongo_host: mongo.intra
+mongo_host: data1.intra
 
-pg_host: sql.intra
+pg_host: data1.intra
 pg_ip: 10.1.1.100
 pg_port: 5432
 pg_subnet: 10.1.1.0/24
