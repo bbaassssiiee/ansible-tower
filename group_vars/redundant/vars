@@ -24,6 +24,5 @@ mongo_host: data1
 
 pg_host: data1
 pg_ip: 192.168.22.10
-pg_port: 5432
 pg_subnet: 192.168.22.0/24
 slave_ip: 192.168.22.11

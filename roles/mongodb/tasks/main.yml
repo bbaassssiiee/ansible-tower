@@ -14,6 +14,7 @@
   tags:
     - mongodb
 
+
 - name: Install pymongo
   yum: name=python-pymongo state=present
   tags:

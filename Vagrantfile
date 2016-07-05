@@ -14,18 +14,6 @@ Vagrant.configure("2") do |config|
   config.vm.boot_timeout = 900
   config.vm.graceful_halt_timeout=100
 
-  # If ansible is in your path it will provision from your HOST machine
-  # If ansible is not found in the path it will be instaled in the VM and provisioned from there
-#  config.vm.provision "ansible" do |ansible|
-#    ansible.inventory_path = "inventory.ini"
-#    ansible.playbook = "deploy.yml"
-#    ansible.raw_arguments = "--ask-vault-pass"
-#    ansible.verbose = "vv"
-#    ansible.host_key_checking = "false"
-#  end
-
-
-
   config.vm.define :data1, autostart: true do |data1_config|
     # disable guest additions
     data1_config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true

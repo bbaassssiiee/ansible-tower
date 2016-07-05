@@ -212,3 +212,15 @@
     - towerconfig
     - cron
 
+- name: 'Setup a branded logo'
+  copy: src=custom_console_logo.png
+        dest=/var/lib/awx/public/static/assets/custom_console_logo.png
+        owner=awx
+  tags:
+    - branding
+
+- name: 'Create local settings file'
+  copy: src=local_settings.json dest=/var/lib/awx/public/static/local_settings.json 
+        owner=awx
+  tags:
+    - branding
