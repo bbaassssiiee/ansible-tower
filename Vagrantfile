@@ -28,11 +28,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :data1, autostart: true do |data1_config|
     # disable guest additions
-    data1_config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
+    data1_config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: false
     data1_config.vm.network "private_network", ip: "192.168.22.10", :netmask => "255.255.255.0",  auto_config: true
-    data1_config.vm.network "forwarded_port", id: 'psql', guest: 5432, host: 15432, auto_correct: true
+    #data1_config.vm.network "forwarded_port", id: 'psql', guest: 5432, host: 15432, auto_correct: true
     data1_config.vm.hostname = "master"
-    data1_config.vm.network "forwarded_port", id: 'mongo', guest: 27010, host: 27010, auto_correct: true
     data1_config.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--memory", "512", "--natnet1", "172.16.1/24"]
       vb.gui = false
@@ -42,11 +41,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :data2, autostart: false do |data2_config|
     # disable guest additions
-    data2_config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
+    data2_config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: false
     data2_config.vm.network "private_network", ip: "192.168.22.11", :netmask => "255.255.255.0",  auto_config: true
     # data2_config.vm.network "forwarded_port", id: 'psql', guest: 5432, host: 15432, auto_correct: true
     data2_config.vm.hostname = "slave"
-  data2_config.vm.network "forwarded_port", id: 'mongo', guest: 27020, host: 27020, auto_correct: true
     data2_config.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--memory", "512", "--natnet1", "172.16.1/24"]
       vb.gui = false
@@ -56,7 +54,6 @@ Vagrant.configure("2") do |config|
 
 #  config.vm.define :data3, autostart: false do |data3_config|
 #    data3_config.vm.network "private_network", ip: "192.168.22.12", :netmask => "255.255.255.0",  auto_config: true
-#   data3_config.vm.network "forwarded_port", id: 'mongo', guest: 27030, host: 27030, auto_correct: true
 #    data3_config.vm.provider "virtualbox" do |vb|
 #      vb.customize ["modifyvm", :id, "--memory", "1024", "--natnet1", "172.16.1/24"]
 #      vb.gui = false
@@ -65,6 +62,7 @@ Vagrant.configure("2") do |config|
 #  end
 
   config.vm.define :app1,  primary: true do |app1_config|
+    app1_config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: false
     app1_config.vm.network "private_network", ip: "192.168.22.13", :netmask => "255.255.255.0",  auto_config: true
     app1_config.vm.hostname = "tower"
     app1_config.vm.provider "virtualbox" do |vb|
@@ -77,7 +75,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :app2,  autostart: false do |app2_config|
   # disable guest additions
-    app2_config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
+    app2_config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: false
     app2_config.vm.network "private_network", ip: "192.168.22.14", :netmask => "255.255.255.0",  auto_config: true
     app2_config.vm.hostname = "standby"
     app2_config.vm.provider "virtualbox" do |vb|

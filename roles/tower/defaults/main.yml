@@ -1,4 +1,5 @@
-tower_version: 2.4.4-1
+tower_version: 3.0.0-1
+#tower_version: 2.4.4-1
 tower_name: ansible-tower-setup-bundle-{{ tower_version }}.el{{ ansible_distribution_major_version }}
 tower_url: https://releases.ansible.com/ansible-tower/setup-bundle/{{ tower_name }}.tar.gz
 temp_dir: /tmp
@@ -12,9 +13,9 @@ tower_ldap_base_dn: "O=Ansible"
 tower_ldap_user_base: "OU=Group,OU=Organization,O=Ansible"
 
 python_libs:
-  - "{{pg_rpm_dir}}/postgresql94-libs-9.4.8-1PGDG.rhel6.x86_64.rpm"
-  - "{{pg_rpm_dir}}/python-psycopg2-2.6.1-1.rhel6.x86_64.rpm"
-  - "{{pg_rpm_dir}}/postgresql94-9.4.8-1PGDG.rhel6.x86_64.rpm"
+  - "{{pg_rpm_dir}}/postgresql94-libs-9.4.8-1PGDG.rhel{{ ansible_distribution_major_version }}.x86_64.rpm"
+  - "{{pg_rpm_dir}}/python-psycopg2-2.6.2-1.rhel{{ ansible_distribution_major_version }}.x86_64.rpm"
+  - "{{pg_rpm_dir}}/postgresql94-9.4.8-1PGDG.rhel{{ ansible_distribution_major_version }}.x86_64.rpm"
 
 python_pips:
   - apache-libcloud
