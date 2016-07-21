@@ -149,7 +149,7 @@
 
 - name: 'run setup'
   become: yes
-  command: bash -lc "cd {{ temp_dir }}/{{ tower_name }} && bash ./setup.sh"
+  command: bash -lc "cd {{ temp_dir }}/{{ tower_name }} && bash ./setup.sh -e pg_port=5432 -e pg_host={{ pg_host }}"
   when: inventory_hostname == primary_machine
   tags:
     - tower
