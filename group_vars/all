@@ -31,3 +31,4 @@ pg_rpm_dir: '{{ temp_dir }}/{{ tower_name }}/bundle/repos/pgdg94'
 # don't change these
 pg_username: awx
 pg_database: awx
+pg_port: 5432

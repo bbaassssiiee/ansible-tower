@@ -5,6 +5,7 @@
   with_items:
     - python-pip
     - python-devel
+    - python-pyasn1
   tags:
     - pypi
 
@@ -13,13 +14,6 @@
   with_items:
     - libffi-devel
     - gcc
-  tags:
-    - pypi
-    
-- name: 'install fixes for openssl'
-  pip: name={{item}} state=present
-  with_items:
-     - pyasn1
   tags:
     - pypi
     

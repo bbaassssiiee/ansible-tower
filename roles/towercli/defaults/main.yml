@@ -1,6 +1,6 @@
 ---
 
-repository: "{{ repo_host }}/python_libraries"
+repository: "https://{{ repo_host }}/python_libraries"
 
 tower_cli: "ansible-tower-cli-2.3.0"
 tower_cli_url: "{{repository}}/{{tower_cli}}.tar.gz"

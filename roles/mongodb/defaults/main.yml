@@ -24,4 +24,3 @@ mongo_logs:
 # Database
 mongo_db:
     path: /var/lib/mongo
-

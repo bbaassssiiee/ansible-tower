@@ -11,44 +11,14 @@
 
 - name: 'copy requirements.txt'
   copy: src=requirements.txt dest=/tmp/requirements.txt
-  when: internet is defined
   tags:
     - towercli
     
 - name: 'pip install dependencies'
   pip: requirements=/tmp/requirements.txt state=latest
-  when: internet is defined
   tags:
     - towercli
     
-- name: 'Download Python libraries'
-  get_url: validate_certs=no url={{item.url}} dest=/tmp/{{item.base}}.tar.gz
-  when: internet is not defined
-  with_items: '{{ python_libraries }}'
-  tags:
-    - towercli
-
-- name: 'Unpack Python libraries'
-  command: tar xfz /tmp/{{item.base}}.tar.gz -C /tmp
-  when: internet is not defined
-  with_items: '{{ python_libraries }}'
-  tags:
-    - towercli
-
-- name: 'Install Python libraries'
-  shell: (cd /tmp/{{item.base}};python setup.py install)
-  when: internet is not defined
-  with_items: '{{ python_libraries }}'
-  tags:
-    - towercli
-
-- name: 'Cleanup'
-  shell: rm -rf /tmp/{{item.base}} /tmp/{{item.base}}.tar.gz
-  when: internet is not defined
-  with_items: '{{ python_libraries }}'
-  tags:
-    - towercli
-
 - name: 'Configure tower host'
   command: tower-cli --help
   tags:

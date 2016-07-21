@@ -5,4 +5,3 @@ colorama
 dict.sorted
 six
 ansible-tower-cli==2.3.0
-

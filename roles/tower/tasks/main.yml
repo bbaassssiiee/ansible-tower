@@ -67,13 +67,14 @@
     - tower
 
 - name: 'generate known host record primary_machine'
-  shell: ssh-keyscan -H {{ primary_machine }} >> /root/.ssh/known_hosts
+  shell: ssh-keyscan -H {{ hostvars[primary_machine][ 'ansible_eth0' ]['ipv4']['address'] }} >> /root/.ssh/known_hosts
   tags:
     - sshkey
     - tower
 
 - name: 'generate known host record secondary_machine'
-  shell: ssh-keyscan -H {{ secondary_machine }} >> /root/.ssh/known_hosts
+  shell: ssh-keyscan -H {{ hostvars[secondary_machine][ 'ansible_eth0' ]['ipv4']['address'] }} >> /root/.ssh/known_hosts
+  #shell: ssh-keyscan -H {{ secondary_machine }} >> /root/.ssh/known_hosts
   when: secondary_machine is defined
   tags:
     - sshkey
@@ -92,10 +93,10 @@
     - tower
 
 
-#- name: 'set umask to 022'
-#  lineinfile: dest=/root/.bashrc line='umask 022' state=present
-#  tags:
-#    - umask
+- name: 'set umask to 022'
+  lineinfile: dest=/root/.bashrc line='umask 022' state=present
+  tags:
+    - umask
 
 - name: 'set umask to 022'
   become: no
@@ -120,10 +121,11 @@
     - rpm
 
 - name: 'install python library rpms'
-  yum: name={{ item }} state=installed
+  yum: name={{ item }} state=present
   with_items: '{{ python_libs }}'
   tags:
     - tower
+    - python_pips
     - rpm
 
 - name: 'pip install more Ansible Core 1.9 dependencies'
@@ -210,3 +212,15 @@
     - towerconfig
     - cron
 
+- name: 'Setup a branded logo'
+  copy: src=custom_console_logo.png
+        dest=/var/lib/awx/public/static/assets/custom_console_logo.png
+        owner=awx
+  tags:
+    - branding
+
+- name: 'Create local settings file'
+  copy: src=local_settings.json dest=/var/lib/awx/public/static/local_settings.json 
+        owner=awx
+  tags:
+    - branding

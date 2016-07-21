@@ -1,0 +1,4 @@
+---
+
+- name: Test pypi artifactory listening socket
+  wait_for: host={{artifactory_hostname}} port={{artifactory_port}} timeout=30

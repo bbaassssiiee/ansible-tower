@@ -18,6 +18,7 @@ python_libs:
   - "{{pg_rpm_dir}}/postgresql94-9.4.8-1PGDG.rhel{{ ansible_distribution_major_version }}.x86_64.rpm"
 
 python_pips:
+  - pbr>=1.8
   - apache-libcloud
   - azure
   - boto
@@ -31,7 +32,6 @@ python_pips:
   - pysphere
   - python-keystoneclient
   - python-novaclient
-  - python-quantumclient
   - pretty
   - pyrax
   - shade

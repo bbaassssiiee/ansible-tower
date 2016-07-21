@@ -1,6 +1,6 @@
 #!/usr/bin/env ansible-playbook
 
-- hosts: dataservers
+- hosts: dataservers:appservers
   become: yes
   gather_facts: yes
   roles:
@@ -9,19 +9,18 @@
     - download
     - epel
     - pypi
-#    - mongodb
+
+- hosts: dataservers
+  become: yes
+  gather_facts: yes
+  roles:
+    - mongodb
     - postgres
 
 - hosts: appservers
   become: yes
   gather_facts: yes
   roles:
-    - common
-    - hosts
-    - download
-    - epel
-    - pypi
     - git
-    - pypi
     - tower
     - towercli

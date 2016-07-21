@@ -24,5 +24,4 @@ mongo_host: data1
   
 pg_host: localhost
 pg_ip: 127.0.0.1
-pg_port: 5432
 pg_subnet:  '127.0.0.1/32'
