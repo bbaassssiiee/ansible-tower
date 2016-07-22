@@ -149,6 +149,13 @@
     - tower
     - towerconfig
 
+- name: 'place configuration file'
+  template: src=ansible.cfg.j2 dest={{ temp_dir }}/{{ tower_name }}/ansible.cfg
+            owner={{ ansible_user }}
+  tags:
+    - tower
+    - towerconfig
+
 - name: 'run setup'
   become: yes
   command: bash -lc "cd {{ temp_dir }}/{{ tower_name }} && bash ./setup.sh -e pg_port=5432 -e pg_host={{ pg_host }}"

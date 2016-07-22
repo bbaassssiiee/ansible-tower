@@ -14,7 +14,6 @@
   become: yes
   gather_facts: yes
   roles:
-    - mongodb
     - postgres
 
 - hosts: appservers

@@ -7,5 +7,15 @@
 {% endif %}
 
 [all:vars]
-ansible_ssh_user={{ install_user }} ansible_ssh_port={{ ssh_port }} {{ ansible_options }}
-[all:vars]
+ansible_ssh_user={{ install_user }}
+ansible_ssh_port={{ ssh_port }} {{ ansible_options }}
+admin_password={{ admin_password }}
+pg_database={{ pg_database }}
+pg_host={{ pg_host }}
+pg_password={{ pg_password }}
+pg_port={{ pg_port }}
+pg_username={{ pg_username }}
+primary_machine={{ primary_machine }}
+redis_host=localhost
+redis_port=6379
+redis_password={{ redis_password }}
