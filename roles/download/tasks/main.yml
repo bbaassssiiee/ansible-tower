@@ -1,7 +1,7 @@
 ---
 - name: 'download ansible tower installer'
   become: no
-  get_url: url={{ tower_url }} dest=~ validate_certs=no
+  get_url: url={{ tower_url }} dest=~ validate_certs=no timeout=60
   retries: 3
   register: download
   tags:
