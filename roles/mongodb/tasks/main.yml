@@ -1,9 +1,10 @@
 ---
 #  We install pymongo from in-house epel repo, mongo from bundle
-#- name: Create the MongoDB repo file
-#  copy: src=mongodb.repo dest=/etc/yum.repos.d/mongodb-org-3.0.repo
-#  tags:
-#    - mongodb
+- name: Create the MongoDB repo file
+  copy: src=mongodb.repo dest=/etc/yum.repos.d/mongodb-org-3.0.repo
+  when: internet is defined
+  tags:
+    - mongodb
 
 - name: 'make sure mongo_rpm_dir is defined.'
   fail: msg='variable mongo_rpm_dir is undefined'
@@ -14,9 +15,13 @@
   tags:
     - mongodb
 
+- name: Install python-pip
+  yum: name=python-pip state=latest
+  tags:
+    - mongodb
 
 - name: Install pymongo
-  yum: name=python-pymongo state=present
+  pip: name=pymongo state=latest
   tags:
     - mongodb
 
@@ -69,9 +74,12 @@
   tags:
     - mongodb
 
+# in 3 you need a role: db.createUser({ user: "username",pwd: "password", roles: []})
 - name: Create Mongo user
   mongodb_user: name={{ mongo_username }}
                 password={{ mongo_password }}
                 database={{ mongo_database }}
+                roles="dbAdmin"
+  ignore_errors: no
   tags:
     - mongodb
