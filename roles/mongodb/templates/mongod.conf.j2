@@ -4,9 +4,6 @@
 bind_ip={{ mongo_net.ip }}
 port={{ mongo_net.port }}
 
-# Don't listen on a Unix socket in /tmp
-net.unixDomainSocket.enabled: false
-
 logpath={{ mongo_logs.path }}
 logappend={{ mongo_logs.append }}
 
