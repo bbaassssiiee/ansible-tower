@@ -12,7 +12,7 @@
   tags:
     - install
     - postgres
-    
+
 - name: 'make sure pg_username and pg_password are defined.'
   fail: msg='variables undefined'
   when:
@@ -25,7 +25,7 @@
 - name: 'install postgres packages'
   become: yes
   yum: name={{ item }} state=present
-  with_fileglob: '{{ pg_rpm_dir }}/*.rpm'
+  with_items: '{{ postgres_packages }}'
   tags:
     - install
     - postgres

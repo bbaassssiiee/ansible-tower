@@ -33,6 +33,5 @@ python_pips:
   - python-keystoneclient
   - python-novaclient
   - pretty
-  - pyrax
   - shade
   - wsgiref
