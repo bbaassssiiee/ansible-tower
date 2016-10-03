@@ -1,7 +1,7 @@
 ---
 - name: 'Install pip from default repo'
   become: yes
-  shell: yum -y install {{ item }}
+  command: yum -y install {{ item }}
   with_items:
     - python-pip
     - python-devel
@@ -16,7 +16,7 @@
     - gcc
   tags:
     - pypi
-    
+
 - name: 'Make sure directory exists'
   become: yes
   file: dest=/root/.pip state=directory owner=root group=root
@@ -33,7 +33,7 @@
 
 - name: 'Upgrade pip from the pypi mirror'
   become: yes
-  shell: pip install pip --upgrade
+  command: pip install pip --upgrade
   tags:
     - pypi
     - test

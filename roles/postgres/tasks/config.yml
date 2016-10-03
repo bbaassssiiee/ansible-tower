@@ -8,8 +8,8 @@
     - bash
 
 - name: 'amend path variable'
-  lineinfile: dest=~/.bashrc 
-              line='export PATH=$PATH:/usr/pgsql-9.4/bin' 
+  lineinfile: dest=~/.bashrc
+              line='export PATH=$PATH:/usr/pgsql-9.4/bin'
               state=present
   tags:
     - postgres
@@ -17,14 +17,14 @@
 
 - name: 'amend path variable'
   lineinfile: dest=/var/lib/pgsql/.bash_profile
-              line='export PATH=$PATH:/usr/pgsql-9.4/bin' 
+              line='export PATH=$PATH:/usr/pgsql-9.4/bin'
               state=present
   tags:
     - postgres
     - bash
 
 - name: 'init postgresql database'
-  command: service postgresql-9.4 initdb creates=/var/lib/pgsql/9.4/data/postgresql.conf
+  command: /etc/init.d/postgresql-9.4 initdb creates=/var/lib/pgsql/9.4/data/postgresql.conf
   become: yes
   notify:
     - restart postgresql-9.4
@@ -78,9 +78,9 @@
 
 - name: 'unset ip to listen on to ipv4 localhost'
   become: yes
-  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf 
+  lineinfile: dest=/var/lib/pgsql/9.4/data/postgresql.conf
               insertbefore='^#listen_addresses'
-              line="listen_addresses = '127.0.0.1'" 
+              line="listen_addresses = '127.0.0.1'"
               state=absent
   tags:
     - config
@@ -194,17 +194,17 @@
     - pguser
 
 - name: 'initialize the replicator user'
-  postgresql_user: name='replicator' 
-                   role_attr_flags='REPLICATION' 
+  postgresql_user: name='replicator'
+                   role_attr_flags='REPLICATION'
                    password="{{ pg_password }}"
   when: role is undefined or role == "master"
   tags:
     - postgres
     - pguser
     - replica
-  
+
 - name: 'start the slave with the script in /usr/local/bin'
-  expect: 
+  expect:
     command: /usr/local/bin/start_pg_slave.sh
     responses:
       Password: "{{ pg_password }}"
@@ -221,4 +221,3 @@
   tags:
     - postgres
     - pguser
-

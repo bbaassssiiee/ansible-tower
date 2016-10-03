@@ -32,7 +32,7 @@
     - sshkey
 
 - name: 'install authorized key'
-  shell: cp /root/.ssh/{{ ansible_ssh_key }}.pub /root/.ssh/authorized_keys
+  command: cp /root/.ssh/{{ ansible_ssh_key }}.pub /root/.ssh/authorized_keys
   when: inventory_hostname == primary_machine
   ignore_errors: yes
   tags:
@@ -44,7 +44,7 @@
   tags:
     - sshkey
     - keycopy
-  
+
 - name: 'place ssh key'
   copy: src=/tmp/{{ primary_machine }}.pub dest=/root/.ssh/authorized_keys mode=0600
   when: secondary_machine is defined and inventory_hostname == secondary_machine
@@ -106,7 +106,8 @@
     - tower
 
 - name: 'figure out if ansible is present'
-  shell: 'ansible --version'
+  command: 'ansible --version'
+  changed_when: no
   ignore_errors: yes
   register: present_version_ok
   tags:
@@ -117,7 +118,7 @@
   yum: name='{{ ansible_rpm }}' state=present
   when: present_version_ok|failed
   tags:
-    - tower 
+    - tower
     - rpm
 
 - name: 'install python library rpms'
@@ -228,7 +229,7 @@
     - branding
 
 - name: 'Create local settings file'
-  copy: src=local_settings.json dest=/var/lib/awx/public/static/local_settings.json 
+  copy: src=local_settings.json dest=/var/lib/awx/public/static/local_settings.json
         owner=awx
   tags:
     - branding

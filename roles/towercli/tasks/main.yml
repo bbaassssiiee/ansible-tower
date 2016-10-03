@@ -13,14 +13,15 @@
   copy: src=requirements.txt dest=/tmp/requirements.txt
   tags:
     - towercli
-    
+
 - name: 'pip install dependencies'
-  pip: requirements=/tmp/requirements.txt state=latest
+  pip: requirements=/tmp/requirements.txt state=present
   tags:
     - towercli
-    
+
 - name: 'Configure tower host'
   command: tower-cli --help
+  changed_when: no
   tags:
     - towercli
     - test
@@ -44,4 +45,3 @@
   command: tower-cli config verify_ssl false
   tags:
     - towercli
-
