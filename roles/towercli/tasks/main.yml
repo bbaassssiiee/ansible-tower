@@ -1,7 +1,7 @@
 ---
 
 - name: 'Install Python rpm dependencies'
-  command: yum -y install {{item}}
+  yum: name={{item}} state=present
   with_items:
     - python-pyasn1
     - python-requests

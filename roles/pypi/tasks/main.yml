@@ -1,7 +1,7 @@
 ---
 - name: 'Install pip from default repo'
   become: yes
-  command: yum -y install {{ item }}
+  yum: name={{ item }} state=present
   with_items:
     - python-pip
     - python-devel
@@ -13,6 +13,7 @@
   yum: name={{item}} state=present
   with_items:
     - libffi-devel
+    - openssl-devel
     - gcc
   tags:
     - pypi
