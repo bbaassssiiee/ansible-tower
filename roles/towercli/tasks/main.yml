@@ -28,20 +28,24 @@
 
 - name: 'Configure tower host'
   command: tower-cli config host {{tower_host}}
+  changed_when: yes
   tags:
     - towercli
 
 - name: 'Configure tower username'
   command: tower-cli config username {{tower_user}}
+  changed_when: yes
   tags:
     - towercli
 
 - name: 'Configure tower password'
   command: tower-cli config password {{tower_password}}
+  changed_when: yes
   tags:
     - towercli
 
 - name: 'Configure Tower for imperfect SSL certificates'
   command: tower-cli config verify_ssl false
+  changed_when: no
   tags:
     - towercli

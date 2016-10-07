@@ -31,10 +31,3 @@
   when: internet is not defined
   tags:
     - pypi
-
-- name: 'Upgrade pip from the pypi mirror'
-  become: yes
-  command: pip install pip --upgrade
-  tags:
-    - pypi
-    - test

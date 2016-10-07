@@ -68,6 +68,7 @@
 
 - name: 'generate known host record primary_machine'
   shell: ssh-keyscan -H {{ hostvars[primary_machine][ 'ansible_eth0' ]['ipv4']['address'] }} >> /root/.ssh/known_hosts
+  changed_when: yes
   tags:
     - sshkey
     - tower
@@ -190,6 +191,7 @@
 
 - name: 'restart tower for new settings'
   command: ansible-tower-service restart
+  changed_when: yes
   tags:
     - tower
     - towerconfig
