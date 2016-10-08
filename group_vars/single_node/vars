@@ -3,7 +3,7 @@ home_dir: /home/vagrant
 temp_dir: "{{ home_dir }}"
 primary_machine: app1
 
-ssh_port: 22
+
 ansible_options: ansible_sudo={{ configure_private_vars.ansible_sudo }}
 tower_host: "{{ primary_machine }}"
 database: external

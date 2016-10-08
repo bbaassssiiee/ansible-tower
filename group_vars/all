@@ -6,11 +6,10 @@ ansible_ssh_key: id_rsa
 home_dir: "{{ lookup('env','HOME') }}"
 temp_dir: "{{ home_dir }}"
 enable_ldap: False
-
+ssh_port: 22
 tower_host: tower
-repo_host: artifactory
 
-# For determining RPM filenames for PostgreSQL, MongoDB and Tower
+# For determining RPM filenames for PostgreSQL and Tower
 rh: el{{ ansible_distribution_major_version }}
 rel: rhel{{ ansible_distribution_major_version }}
 

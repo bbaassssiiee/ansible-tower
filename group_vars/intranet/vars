@@ -3,7 +3,7 @@ home_dir: /home/ansible
 temp_dir: "{{ home_dir }}"
 primary_machine: tower1.intra
 secondary_machine: tower2.intra
-ssh_port: 22
+
 ansible_options: ansible_sudo={{ configure_private_vars.ansible_sudo }}
 tower_host: "{{ primary_machine }}"
 database: external
