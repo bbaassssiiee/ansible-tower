@@ -1,7 +1,7 @@
 PyYAML
-#requests
-#click
+
 colorama
 dict.sorted
 six
 ansible-tower-cli==2.3.0
+ndg_httpsclient==0.4.0
