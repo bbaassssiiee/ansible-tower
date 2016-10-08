@@ -15,10 +15,6 @@ configure_private_vars:
   ansible_sudo: true
   using_ssh_host_keys: true
 
-mongo: true
-mongo_database: ansible
-mongo_host: data1.intra
-
 pg_host: data1.intra
 pg_ip: 10.1.1.100
 pg_subnet: 10.1.1.0/24
