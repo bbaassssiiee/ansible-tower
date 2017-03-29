@@ -23,3 +23,13 @@
     - git
     - tower
     - towercli
+
+- hosts: targets
+  become: yes
+  gather_facts: yes
+  roles:
+    - common
+    - hosts
+    - epel
+    - pypi
+

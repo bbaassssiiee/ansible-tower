@@ -1,0 +1,28 @@
+ansible_user: vagrant
+home_dir: /home/vagrant
+temp_dir: "{{ home_dir }}"
+primary_machine: app1
+
+
+ansible_options: ansible_sudo={{ configure_private_vars.ansible_sudo }}
+tower_host: "{{ primary_machine }}"
+database: external
+enable_ldap: False
+
+# only define this when internet is available
+internet: true
+
+configure_private_vars:
+  ansible_ask_sudo_pass: false
+  ansible_ssh_user: '{{ ansible_user }}'
+  ansible_sudo: true
+  using_ssh_host_keys: true
+
+pg_host: localhost
+pg_ip: 127.0.0.1
+pg_subnet:  '{{ ansible_default_ipv4["address"] }}/32'
+
+
+
+tower_url: file:///Users/Shared/{{ tower_name }}.tar.gz
+

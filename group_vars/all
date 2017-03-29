@@ -13,10 +13,10 @@ tower_host: tower
 rh: el{{ ansible_distribution_major_version }}
 rel: rhel{{ ansible_distribution_major_version }}
 
-tower_version: 3.0.2-1
+tower_version: 3.0.3-2
 tower_name: ansible-tower-setup-bundle-{{ tower_version }}.{{ rh }}
 tower_url: https://releases.ansible.com/ansible-tower/setup-bundle/{{ tower_name }}.tar.gz
-ansible_rpm: "{{ temp_dir }}/{{ tower_name }}/bundle/repos/epel/ansible-2.1.1.0-1.{{ rh }}.noarch.rpm"
+ansible_rpm: "{{ temp_dir }}/{{ tower_name }}/bundle/repos/epel/ansible-2.2.1.0-1.{{ rh }}.noarch.rpm"
 pg_rpm_dir: '{{ temp_dir }}/{{ tower_name }}/bundle/repos/pgdg94'
 
 # don't change these

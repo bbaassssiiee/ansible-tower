@@ -1,9 +1,9 @@
 ---
 
 postgres_packages:
-  - "{{pg_rpm_dir}}/postgresql94-libs-9.4.9-1PGDG.rhel{{ ansible_distribution_major_version }}.x86_64.rpm"
-  - "{{pg_rpm_dir}}/postgresql94-9.4.9-1PGDG.rhel{{ ansible_distribution_major_version }}.x86_64.rpm"
-  - "{{pg_rpm_dir}}/postgresql94-server-9.4.9-1PGDG.rhel{{ ansible_distribution_major_version }}.x86_64.rpm"
-  - "{{pg_rpm_dir}}/python-psycopg2-2.6.2-1.rhel{{ ansible_distribution_major_version }}.x86_64.rpm"
+  - "{{pg_rpm_dir}}/postgresql94-libs-9.4.10-1PGDG.rhel{{ ansible_distribution_major_version }}.x86_64.rpm"
+  - "{{pg_rpm_dir}}/postgresql94-9.4.10-1PGDG.rhel{{ ansible_distribution_major_version }}.x86_64.rpm"
+  - "{{pg_rpm_dir}}/postgresql94-server-9.4.10-1PGDG.rhel{{ ansible_distribution_major_version }}.x86_64.rpm"
+  - "{{pg_rpm_dir}}/python-psycopg2-2.6.2-3.rhel{{ ansible_distribution_major_version }}.x86_64.rpm"
 
 postgres_jdbc_url: "https://jdbc.postgresql.org/download/postgresql-9.4-1201.jdbc41.jar"

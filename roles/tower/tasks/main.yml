@@ -67,7 +67,7 @@
     - tower
 
 - name: 'generate known host record primary_machine'
-  shell: ssh-keyscan -H {{ hostvars[primary_machine][ 'ansible_eth0' ]['ipv4']['address'] }} >> /root/.ssh/known_hosts
+  shell: ssh-keyscan -H {{ hostvars[primary_machine][ 'ansible_all_ipv4_addresses' ][1] }} >> /root/.ssh/known_hosts
   changed_when: yes
   tags:
     - sshkey

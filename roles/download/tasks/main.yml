@@ -10,7 +10,6 @@
 
 - name: 'untar ansible tower installer'
   become: no
-  #command: tar xfz {{ download.dest }} -C {{ temp_dir }}
   unarchive: src={{ download.dest }} copy=no dest={{ temp_dir }}
   register: untar
   tags:
